@@ -4,11 +4,21 @@ temp = open( "places.txt", "r" );
 text = temp.read( ).split( "id: ");
 temp.close( );
 
+temp = open( "zipToCoord.txt", "r" );
+lines = temp.readlines( );
+temp.close( );
+
 placeID = "";
 currentHour = "";
 currentDay = "";
 closedString = "No places are open"
 #(40.733400, -73.995484), (40.735847, -73.993542)
+
+
+def converter( zip ):
+    for address in lines:
+        if address[ 0:5 ] == zip:
+            return address[ 6:-2 ].split( ", " );
 
 # creates a dictionary of places within a box, makes a new dictionary with all the places along w their popularity at hour hour, and returns best place
 def findBestPlace( hour, day, lat, long ):
@@ -37,4 +47,6 @@ def lowestValue( dictionary ):
         return closedString;
     return minKey
 
-findBestPlace( 23, "Friday", 40.733441, -73.995186 );
+
+coords = converter( "10003" )
+findBestPlace( 23, "Friday", float( coords[ 0 ] ), float( coords [ 1 ] ) );

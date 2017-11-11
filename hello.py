@@ -1,4 +1,4 @@
-    import logging
+import logging
 import requests
 from flask import Flask
 from flask_ask import Ask, statement, context
@@ -17,7 +17,6 @@ def get_alexa_location():
     if r.status_code == 200:
         return(r.json())
 
-
 @ask.launch
 def launch():
     return start()
@@ -25,12 +24,14 @@ def launch():
 @ask.intent("WhatIsMyLocation")
 def start():
     location = get_alexa_location()
-    print( location );
-    return statement( location[ "postalCode" ] );
     # city = "Your City is {}! ".format(location["city"].encode("utf-8"))    
     # address = "Your address is {}! ".format(location["addressLine1"].encode("utf-8")) 
-    # speech = city + address   
-    # return statement(speech)
+    # speech = city + address 
+    print( location );
+    # print( speech );
+    
+    return statement( "you should go to: " + location[ "postalCode" ] );
+
 
 if __name__ == '__main__':
     app.run(debug=True)

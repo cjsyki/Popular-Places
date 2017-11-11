@@ -1,4 +1,6 @@
 import populartimes;
+import requests;
+import datetime;
 
 temp = open( "places.txt", "r" );
 text = temp.read( ).split( "id: ");
@@ -48,5 +50,17 @@ def lowestValue( dictionary ):
     return minKey
 
 
+timeZoneKey = "AIzaSyDlGb9D4KfSf-Qr1M1_xCw9TQxIVmudbuM";
+
 coords = converter( "10003" )
-findBestPlace( 23, "Friday", float( coords[ 0 ] ), float( coords [ 1 ] ) );
+lat = float( coords[ 0 ] );
+long = float( coords[ 1 ] );
+i = datetime.datetime.now( );
+days = [ "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" ];
+day = days[ i.weekday( ) ]
+hour = i.hour;
+# URL = "https://maps.googleapis.com/maps/api/timezone/json?location=" + str( lat) + "," + str( long ) + "&timestamp=${moment().unix()}&key=" + timeZoneKey;
+# URL = "https://maps.googleapis.com/maps/api/timezone/json?location=38.908133,-77.047119&timestamp=1458000000&key=" + timeZoneKey;
+# r = requests.get( URL )
+# print( r.json( ) );
+findBestPlace( hour, day, float( coords[ 0 ] ), float( coords [ 1 ] ) );

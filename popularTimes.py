@@ -36,6 +36,7 @@ def findBestPlace( hour, day, lat, long ):
             break;
     print( newDict ); #test print
     print( lowestValue( newDict ) );
+    return( lowestValue( newDict ) );
 
 #returns key with lowest value in a dictionary
 def lowestValue( dictionary ):
@@ -52,15 +53,15 @@ def lowestValue( dictionary ):
 
 timeZoneKey = "AIzaSyDlGb9D4KfSf-Qr1M1_xCw9TQxIVmudbuM";
 
-coords = converter( "10003" )
-lat = float( coords[ 0 ] );
-long = float( coords[ 1 ] );
-i = datetime.datetime.now( );
-days = [ "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" ];
-day = days[ i.weekday( ) ]
-hour = i.hour;
+# coords = converter( "10003" )
+# lat = float( coords[ 0 ] );
+# long = float( coords[ 1 ] );
+# i = datetime.datetime.now( );
+# days = [ "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" ];
+# day = days[ i.weekday( ) ]
+# hour = i.hour;
 # URL = "https://maps.googleapis.com/maps/api/timezone/json?location=" + str( lat) + "," + str( long ) + "&timestamp=${moment().unix()}&key=" + timeZoneKey;
 # URL = "https://maps.googleapis.com/maps/api/timezone/json?location=38.908133,-77.047119&timestamp=1458000000&key=" + timeZoneKey;
 # r = requests.get( URL )
 # print( r.json( ) );
-findBestPlace( hour, day, lat, long );
+# findBestPlace( hour, day, lat, long );

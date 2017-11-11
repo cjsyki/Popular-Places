@@ -1,7 +1,2 @@
-welcome: Welcome to memory game. I'm going to say three numbers for you to repeat backwards. Ready?
+where: Where do you want to go to right now?
 
-round: Can you repeat the numbers {{ numbers|join(", ") }} backwards?
-
-win: Good job!
-
-lose: Sorry, that's the wrong answer.

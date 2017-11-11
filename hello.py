@@ -1,11 +1,15 @@
 import logging
 import requests
-from flask import Flask
+import popularTimes;
+import datetime;
+from flask import Flask, render_template
 from flask_ask import Ask, statement, context
 
 app = Flask(__name__)
 ask = Ask(app, '/')
 log = logging.getLogger('flask_ask').setLevel(logging.DEBUG)
+
+zipcode = "";
 
 def get_alexa_location():
     URL =  "https://api.amazonalexa.com/v1/devices/{}/settings" \
@@ -21,17 +25,26 @@ def get_alexa_location():
 def launch():
     return start()
 
-@ask.intent("WhatIsMyLocation")
+@ask.intent("WhereYouWannaGo")
 def start():
+    msg = render_template( "where" );
     location = get_alexa_location()
-    # city = "Your City is {}! ".format(location["city"].encode("utf-8"))    
-    # address = "Your address is {}! ".format(location["addressLine1"].encode("utf-8")) 
-    # speech = city + address 
-    print( location );
-    # print( speech );
-    
-    return statement( "you should go to: " + location[ "postalCode" ] );
+    name = main( str( location[ "postalCode" ] ) );
+    if name == popularTimes.closedString:
+        return statement( popularTimes.closedString );
+    print( "you should go to: " + name );
+    return statement( "you should go to: " + name );
 
+def main( zipcode ): 
+    coords = popularTimes.converter( zipcode )
+    lat = float( coords[ 0 ] );
+    long = float( coords[ 1 ] );
+    i = datetime.datetime.now( );
+    days = [ "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" ];
+    day = days[ i.weekday( ) ]
+    hour = i.hour;
+    name = popularTimes.findBestPlace( hour, day, lat, long );
+    return name;
 
 if __name__ == '__main__':
     app.run(debug=True)

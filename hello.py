@@ -1,59 +1,36 @@
-
-import logging
-
-from random import randint
-
-from flask import Flask, render_template
-
-from flask_ask import Ask, statement, question, session
-
+    import logging
+import requests
+from flask import Flask
+from flask_ask import Ask, statement, context
 
 app = Flask(__name__)
+ask = Ask(app, '/')
+log = logging.getLogger('flask_ask').setLevel(logging.DEBUG)
 
-ask = Ask(app, "/")
-
-logging.getLogger("flask_ask").setLevel(logging.DEBUG)
+def get_alexa_location():
+    URL =  "https://api.amazonalexa.com/v1/devices/{}/settings" \
+           "/address".format(context.System.device.deviceId)
+    TOKEN =  context.System.user.permissions.consentToken
+    HEADER = {'Accept': 'application/json',
+             'Authorization': 'Bearer {}'.format(TOKEN)}
+    r = requests.get(URL, headers=HEADER)
+    if r.status_code == 200:
+        return(r.json())
 
 
 @ask.launch
+def launch():
+    return start()
 
-def new_game():
-
-    welcome_msg = render_template('welcome')
-
-    return question(welcome_msg)
-
-
-@ask.intent("YesIntent")
-
-def next_round():
-
-    numbers = [randint(0, 9) for _ in range(3)]
-
-    round_msg = render_template('round', numbers=numbers)
-
-    session.attributes['numbers'] = numbers[::-1]  # reverse
-
-    return question(round_msg)
-
-
-@ask.intent("AnswerIntent", convert={'first': int, 'second': int, 'third': int})
-
-def answer(first, second, third):
-
-    winning_numbers = session.attributes['numbers']
-
-    if [first, second, third] == winning_numbers:
-
-        msg = render_template('win')
-
-    else:
-
-        msg = render_template('lose')
-
-    return statement(msg)
-
+@ask.intent("WhatIsMyLocation")
+def start():
+    location = get_alexa_location()
+    print( location );
+    return statement( location[ "postalCode" ] );
+    # city = "Your City is {}! ".format(location["city"].encode("utf-8"))    
+    # address = "Your address is {}! ".format(location["addressLine1"].encode("utf-8")) 
+    # speech = city + address   
+    # return statement(speech)
 
 if __name__ == '__main__':
-
     app.run(debug=True)

@@ -1,2 +1,20 @@
 where: Where do you want to go to right now?
 
+response: You should go to {{ name }}
+
+# sample utterance:
+# WhereYouWannaGoIntent {place}
+# WhereYouWannaGoIntent I want to go to {place}
+# 
+# 
+# 
+# 
+# RatingsIntent Show me it's ratings
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 

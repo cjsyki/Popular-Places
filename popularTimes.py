@@ -10,12 +10,8 @@ temp = open( "zipToCoord.txt", "r" );
 lines = temp.readlines( );
 temp.close( );
 
-placeID = "";
-currentHour = "";
-currentDay = "";
 closedString = "No places are open"
 #(40.733400, -73.995484), (40.735847, -73.993542)
-
 
 def converter( zip ):
     for address in lines:
@@ -23,9 +19,9 @@ def converter( zip ):
             return address[ 6:-2 ].split( ", " );
 
 # creates a dictionary of places within a box, makes a new dictionary with all the places along w their popularity at hour hour, and returns best place
-def findBestPlace( hour, day, lat, long ):
+def findBestPlace( hour, day, lat, long, place ):
     #create big dictionary using api
-    bigList = populartimes.get("AIzaSyBo8toIXI4IvGZdvvpRtW9Pgf23ub1sVIg", ["bar"], ( lat - 00.002500, long - 00.001000 ), ( lat + 00.002500, long + 00.001000 ) )
+    bigList = populartimes.get("AIzaSyBo8toIXI4IvGZdvvpRtW9Pgf23ub1sVIg", [place], ( lat - 00.002500, long - 00.001000 ), ( lat + 00.002500, long + 00.001000 ) )
     newDict = { };      #new dictionary
     for dicti in bigList:       # for each element in the big dictinary
         name = str( dicti[ "name" ] )       #store id of the location temporarily

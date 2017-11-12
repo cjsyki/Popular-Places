@@ -3,7 +3,7 @@ import requests
 import popularTimes;
 import datetime;
 from flask import Flask, render_template
-from flask_ask import Ask, statement, context
+from flask_ask import Ask, statement, context, question
 
 app = Flask(__name__)
 ask = Ask(app, '/')
@@ -23,27 +23,37 @@ def get_alexa_location():
 
 @ask.launch
 def launch():
-    return start()
+    whereStr_msg = render_template( 'where' );
+    return question( whereStr_msg )
+    # return start()
 
-@ask.intent("WhereYouWannaGo")
-def start():
-    msg = render_template( "where" );
+@ask.intent( "WhereYouWannaGo", convert = { "place": str, "time": str } )
+def start( place, time ):
+    # print( str( place ) );
     location = get_alexa_location()
-    name = main( str( location[ "postalCode" ] ) );
+    zipcode = str( location[ "postalCode" ] );
+    if time is None:
+        name = main( zipcode, place, 25 );
+    else:
+        name = main( zipcode, place, int( time[ 0:2 ] ) );
     if name == popularTimes.closedString:
         return statement( popularTimes.closedString );
-    print( "you should go to: " + name );
-    return statement( "you should go to: " + name );
+    return statement( render_template( "response", name = name ));
 
-def main( zipcode ): 
+
+#10034
+def main( zipcode, place, hour ): 
+    print( zipcode );
     coords = popularTimes.converter( zipcode )
     lat = float( coords[ 0 ] );
     long = float( coords[ 1 ] );
     i = datetime.datetime.now( );
     days = [ "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" ];
     day = days[ i.weekday( ) ]
-    hour = i.hour;
-    name = popularTimes.findBestPlace( hour, day, lat, long );
+    if hour == 25:
+        hour = i.hour;
+    # print( hour );s
+    name = popularTimes.findBestPlace( hour, day, lat, long, place );
     return name;
 
 if __name__ == '__main__':

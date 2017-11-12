@@ -1,6 +1,8 @@
-where: Where do you want to go to right now?
+where: Where do you want to go to?
 
 response: You should go to {{ name }}
+
+ratingResponse: For {{ name }}, it got a {{ rating }}
 
 # sample utterance:
 # WhereYouWannaGoIntent {place}

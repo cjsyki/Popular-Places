@@ -29,17 +29,26 @@ def launch():
 
 @ask.intent( "WhereYouWannaGo", convert = { "place": str, "time": str } )
 def start( place, time ):
-    # print( str( place ) );
+    print( str( place ) );
     location = get_alexa_location()
     zipcode = str( location[ "postalCode" ] );
     if time is None:
         name = main( zipcode, place, 25 );
     else:
         name = main( zipcode, place, int( time[ 0:2 ] ) );
+    print( "name of the olace!!!!! " + nameOfPlace )
     if name == popularTimes.closedString:
         return statement( popularTimes.closedString );
-    return statement( render_template( "response", name = name ));
+    return question( render_template( "response", name = name ) );
 
+@ask.intent( "Rating" )
+def rating( name ):
+    rating = popularTimes.findRating( name );
+    return statement( render_template( "ratingResponse", name = nameOfPlace, rating = rating ) );
+
+@ask.intent( "Location" )
+def location( ):
+    return;
 
 #10034
 def main( zipcode, place, hour ): 
@@ -52,8 +61,8 @@ def main( zipcode, place, hour ):
     day = days[ i.weekday( ) ]
     if hour == 25:
         hour = i.hour;
-    # print( hour );s
     name = popularTimes.findBestPlace( hour, day, lat, long, place );
+    nameOfPlace = name;
     return name;
 
 if __name__ == '__main__':

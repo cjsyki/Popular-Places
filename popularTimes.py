@@ -10,7 +10,12 @@ temp = open( "zipToCoord.txt", "r" );
 lines = temp.readlines( );
 temp.close( );
 
-closedString = "No places are open"
+bigList = [ ];
+address = "";
+rating = "";
+
+
+closedString = "No places are open for that time nearby"
 #(40.733400, -73.995484), (40.735847, -73.993542)
 
 def converter( zip ):
@@ -45,6 +50,14 @@ def lowestValue( dictionary ):
     if minKey == "":
         return closedString;
     return minKey
+
+#inputs name, outputs rating of restaurant
+def findRating( name ):
+    for dicti in bigList:
+        if dicti[ "name" ] == name:
+            return str( dicti[ "rating "] );
+    return "No ratings were found"
+
 
 # coords = converter( "10003" )
 # lat = float( coords[ 0 ] );

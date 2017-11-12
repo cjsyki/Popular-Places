@@ -27,19 +27,25 @@ def launch():
     return question( whereStr_msg )
     # return start()
 
-@ask.intent( "WhereYouWannaGo", convert = { "place": str, "time": str } )
-def start( place, time ):
+@ask.intent( "WhereYouWannaGo", convert = { "place": str, "time": str, "zipcode": str } )
+def start( place, time, zipcode ):
     print( str( place ) );
     location = get_alexa_location()
-    zipcode = str( location[ "postalCode" ] );
+    names = []
+    if zipcode is None:
+        zipcode = str( location[ "postalCode" ] );
     if time is None:
-        name = main( zipcode, place, 25 );
+        names = main( zipcode, place, 25 );
     else:
-        name = main( zipcode, place, int( time[ 0:2 ] ) );
-    print( "name of the olace!!!!! " + nameOfPlace )
-    if name == popularTimes.closedString:
+        names = main( zipcode, place, int( time[ 0:2 ] ) );
+    print( names )
+    if len( names ) == 0:
         return statement( popularTimes.closedString );
-    return question( render_template( "response", name = name ) );
+    if len( names ) == 1:
+        return question( render_template( "response", name = names[ 0 ][ 0 ], rating = names[ 0 ][ 1 ] ) );
+    if len( names ) == 2:
+        return question( render_template( "response2", name = names[ 0 ][ 0 ], rating = names[ 0 ][ 1 ], name2 = names[ 1 ][ 0 ], rating2 = names[ 1 ][ 1 ] ) );
+    return question( render_template( "response3", name = names[ 0 ][ 0 ], rating = names[ 0 ][ 1 ], name2 = names[ 1 ][ 0 ], rating2 = names[ 1 ][ 1 ], name3 = names[ 2 ][ 0 ], rating3 = names[ 2 ][ 1 ] ) );
 
 @ask.intent( "Rating" )
 def rating( name ):
@@ -52,7 +58,6 @@ def location( ):
 
 #10034
 def main( zipcode, place, hour ): 
-    print( zipcode );
     coords = popularTimes.converter( zipcode )
     lat = float( coords[ 0 ] );
     long = float( coords[ 1 ] );
@@ -61,9 +66,9 @@ def main( zipcode, place, hour ):
     day = days[ i.weekday( ) ]
     if hour == 25:
         hour = i.hour;
-    name = popularTimes.findBestPlace( hour, day, lat, long, place );
-    nameOfPlace = name;
-    return name;
+    names = popularTimes.findBestPlace( hour, day, lat, long, place );
+    print( "main ", names )
+    return names;
 
 if __name__ == '__main__':
     app.run(debug=True)

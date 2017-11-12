@@ -1,6 +1,10 @@
 where: Where do you want to go to?
 
-response: You should go to {{ name }}
+response: You should go to {{ name }} which is {{ rating }}% crowded
+
+response2: You should go to {{ name }}, which is {{ rating }}% crowded, or {{ name2 }}, which is {{ rating2 }}% crowded
+
+response3: You should go to {{ name }}, which is {{ rating }}% crowded, {{ name2 }}, which is {{ rating2 }}% crowded, or {{ name3 }}, which is {{ rating3 }}% crowded
 
 ratingResponse: For {{ name }}, it got a {{ rating }}
 

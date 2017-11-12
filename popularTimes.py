@@ -2,10 +2,6 @@ import populartimes;
 import requests;
 import datetime;
 
-temp = open( "places.txt", "r" );
-text = temp.read( ).split( "id: ");
-temp.close( );
-
 temp = open( "zipToCoord.txt", "r" );
 lines = temp.readlines( );
 temp.close( );
@@ -16,8 +12,6 @@ rating = "";
 
 
 closedString = "No places are open for that time nearby"
-#(40.733400, -73.995484), (40.735847, -73.993542)
-
 def converter( zip ):
     for address in lines:
         if address[ 0:5 ] == zip:
@@ -36,20 +30,25 @@ def findBestPlace( hour, day, lat, long, place ):
             newDict[ name ] = days[ "data" ][ hour ];  #store places id as key and places populartiy at hour hour as value
             break;
     print( newDict ); #test print
-    print( lowestValue( newDict ) );
-    return( lowestValue( newDict ) );
+    retArray = lowestValue( newDict );
+    print( "findBestPlace", retArray );
+    return( retArray );
 
-#returns key with lowest value in a dictionary
+#returns 3 lowest keys with lowest value in a dictionary
 def lowestValue( dictionary ):
-    minKey = ""
-    minVal = 101;
-    for key, value in dictionary.items( ):
-        if value < minVal and value != 0:           #does not equal zero bc ITS CLOSED!!!
-            minVal = value;
-            minKey = key;
-    if minKey == "":
-        return closedString;
-    return minKey
+    retArray = [ ];
+    for x in range( 3 ):
+        minKey = ""
+        minVal = 101;
+        for key, value in dictionary.items( ):
+            if value < minVal and value != 0 and value != 100:           #does not equal zero bc ITS CLOSED!!!
+                minVal = value;
+                minKey = key;
+        if minKey == "":
+            break;
+        del dictionary[ minKey ];
+        retArray.append( [ minKey, minVal ] );
+    return retArray;
 
 #inputs name, outputs rating of restaurant
 def findRating( name ):

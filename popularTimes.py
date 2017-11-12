@@ -10,6 +10,7 @@ bigList = [ ];
 address = "";
 rating = "";
 
+MAPS_API_KEY = "AIzaSyBo8toIXI4IvGZdvvpRtW9Pgf23ub1sVIg"
 
 closedString = "No places are open for that time nearby"
 def converter( zip ):
@@ -20,7 +21,7 @@ def converter( zip ):
 # creates a dictionary of places within a box, makes a new dictionary with all the places along w their popularity at hour hour, and returns best place
 def findBestPlace( hour, day, lat, long, place ):
     #create big dictionary using api
-    bigList = populartimes.get("AIzaSyBo8toIXI4IvGZdvvpRtW9Pgf23ub1sVIg", [place], ( lat - 00.002500, long - 00.001000 ), ( lat + 00.002500, long + 00.001000 ) )
+    bigList = populartimes.get( MAPS_API_KEY, [place], ( lat - 00.002500, long - 00.001000 ), ( lat + 00.002500, long + 00.001000 ) )
     newDict = { };      #new dictionary
     for dicti in bigList:       # for each element in the big dictinary
         name = str( dicti[ "name" ] )       #store id of the location temporarily

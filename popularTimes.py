@@ -46,9 +46,6 @@ def lowestValue( dictionary ):
         return closedString;
     return minKey
 
-
-timeZoneKey = "AIzaSyDlGb9D4KfSf-Qr1M1_xCw9TQxIVmudbuM";
-
 # coords = converter( "10003" )
 # lat = float( coords[ 0 ] );
 # long = float( coords[ 1 ] );
